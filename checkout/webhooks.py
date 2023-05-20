@@ -10,12 +10,12 @@ import stripe
 @require_POST
 @csrf_exempt
 def webhook(request):
-    """ Listen for webhooks from Stripe """
+    """Listen for webhooks from Stripe"""
     # Setup
     wh_secret = settings.STRIPE_WH_SECRET
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
-    # Get the webhook data and verifi signature
+    # Get the webhook data and verify its signature
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
@@ -49,6 +49,6 @@ def webhook(request):
     # Use the generic one by default
     event_handler = event_map.get(event_type, handler.handle_event)
 
-    #Call the event handler with the event
+    # Call the event handler with the event
     response = event_handler(event)
     return response
